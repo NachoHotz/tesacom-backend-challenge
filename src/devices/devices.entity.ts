@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
+import { Entity, Column, CreateDateColumn, PrimaryColumn } from "typeorm";
 
 @Entity()
 export default class Devices {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   serial: string
 
   @Column({ type: 'varchar', length: 255 })

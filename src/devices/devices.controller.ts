@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Param, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Put, Delete } from '@nestjs/common';
 import {DevicesService} from './devices.service';
 import CreateDeviceDto from './dto/create-devices.dto';
 import UpdateDeviceDto from './dto/update-devices.dto';
@@ -8,13 +8,13 @@ export class DevicesController {
   constructor(private readonly devicesService: DevicesService) {}
 
   @Get()
-  getDevices() {
-    this.devicesService.getDevices();
+  async getDevices() {
+    return await this.devicesService.getDevices();
   }
 
   @Get(':deviceId')
-  getUniqueDevice(@Param('deviceId') deviceId: string) {
-    return this.devicesService.getUniqueDevice(parseInt(deviceId));
+  async getUniqueDevice(@Param('deviceId') deviceId: string) {
+    return await this.devicesService.getUniqueDevice(deviceId);
   }
 
   @Post()
@@ -24,7 +24,11 @@ export class DevicesController {
 
   @Put(':deviceId')
   updateDevice(@Body() updatedDevice: UpdateDeviceDto, @Param('deviceId') deviceId: string) {
-    return this.devicesService.updateDevice(updatedDevice, parseInt(deviceId))
+    return this.devicesService.updateDevice(updatedDevice, deviceId)
   }
 
+  @Delete(':deviceId')
+  deleteDevice(@Param('deviceId') deviceId: string) {
+    return this.devicesService.deleteDevice(deviceId)
+  }
 }
