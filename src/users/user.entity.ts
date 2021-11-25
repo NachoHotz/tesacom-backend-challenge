@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryColumn, CreateDateColumn } from 'typeorm';
 
-@Entity('users')
+@Entity('user')
 export default class User {
   @Column({ type: 'varchar', length: 255 })
   name: string;
