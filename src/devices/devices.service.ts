@@ -50,11 +50,7 @@ export class DevicesService {
 
       return successHandler(true, 200, 'Device created successfully', newDevice)
     } catch (e) {
-      return {
-        success: false,
-        code: 500,
-        error: e
-      }
+      return errorHandler(false, 500, e);
     }
   }
 
