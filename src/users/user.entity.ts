@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryColumn, CreateDateColumn } from 'typeorm';
 
-@Entity()
+@Entity('users')
 export default class User {
   @Column({ type: 'varchar', length: 255 })
   name: string;
@@ -8,7 +8,7 @@ export default class User {
   @Column({ type: 'varchar', length: 255 })
   lastname: string;
 
-  @PrimaryColumn({ type: 'varchar', length: 255 })
+  @PrimaryColumn({ type: 'varchar', length: 255, unique: true })
   email: string;
 
   @Column({ type: 'varchar', length: 255 })
