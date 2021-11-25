@@ -8,27 +8,27 @@ export class AppsController {
   constructor(private readonly appsService: AppsService) {}
 
   @Get()
-  getApps() {
-    return this.appsService.getApps();
+  async getApps() {
+    return await this.appsService.getApps();
   }
 
   @Get(':appsId')
-  getUniqueApp(@Param('appsId') appsId: string) {
-    return this.appsService.getUniqueApp(parseInt(appsId));
+  async getUniqueApp(@Param('appsId') appsId: string) {
+    return await this.appsService.getUniqueApp(parseInt(appsId));
   }
 
   @Post()
-  createApp(@Body() newApp: CreateAppsDto) {
-    return this.appsService.createApp(newApp);
+  async createApp(@Body() newApp: CreateAppsDto) {
+    return await this.appsService.createApp(newApp);
   }
 
   @Put(':appId')
-  updateApp(@Body() updatedApp: UpdateAppDto, @Param('appId') appId: string) {
-    return this.appsService.updateApp(updatedApp, parseInt(appId));
+  async updateApp(@Body() updatedApp: UpdateAppDto, @Param('appId') appId: string) {
+    return await this.appsService.updateApp(updatedApp, parseInt(appId));
   }
 
-  @Delete('appId')
-  deleteApp(@Param('appId') appId: string) {
-    return this.appsService.deleteApp(parseInt(appId));
+  @Delete(':appId')
+  async deleteApp(@Param('appId') appId: string) {
+    return await this.appsService.deleteApp(parseInt(appId));
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { errorHandler, successHandler } from 'src/helpers/handlers';
 import Apps from './apps.entity';
 import CreateAppsDto from './dto/create-apps.dto';
 import UpdateAppDto from './dto/update-apps.dto';
@@ -9,23 +10,64 @@ import UpdateAppDto from './dto/update-apps.dto';
 export class AppsService {
   constructor(@InjectRepository(Apps) private appsRepository: Repository<Apps>) {}
 
-  getApps() {
-    return this.appsRepository.find();
+  async getApps(): Promise<{}> {
+    try {
+      const apps = await this.appsRepository.find();
+
+      if (!apps || apps.length === 0) {
+        return errorHandler(false, 404, 'No apps found');
+      }
+
+      return successHandler(true, 201, 'Found', apps);
+
+    } catch (e) {
+      return errorHandler(false, 500, e);
+    }
   }
 
-  getUniqueApp(appsId: number) {
-    return this.appsRepository.findOne(appsId);
+  async getUniqueApp(appsId: number): Promise<{}> {
+    try {
+      const uniqueApp = await this.appsRepository.findOne(appsId);
+
+      if (!uniqueApp) {
+        return errorHandler(false, 404, 'No app found with that id');
+      }
+
+      return successHandler(true, 201, 'Found', uniqueApp);
+
+    } catch (e) {
+      return errorHandler(false, 500, e);
+    }
   }
 
-  createApp(newApp: CreateAppsDto) {
-    return this.appsRepository.create(newApp);
+  async createApp(newAppBody: CreateAppsDto): Promise<{}> {
+    try {
+      const newApp = await this.appsRepository.create(newAppBody);
+      await this.appsRepository.save(newApp);
+
+      return successHandler(true, 201, 'created successfully', newApp);
+    } catch (e) {
+      return errorHandler(false, 500, e);
+    }
   }
 
-  updateApp(updatedApp: UpdateAppDto, appId: number) {
-    return this.appsRepository.update(appId, updatedApp);
+  async updateApp(updatedApp: UpdateAppDto, appId: number) {
+    try {
+      await this.appsRepository.update(appId, updatedApp);
+
+      return successHandler(true, 201, 'updated successfully');
+    } catch (e) {
+      return errorHandler(false, 500, e);
+    }
   }
 
-  deleteApp(appId: number) {
-    return this.appsRepository.delete(appId);
+  async deleteApp(appId: number) {
+    try {
+      await this.appsRepository.delete(appId);
+
+      return successHandler(true, 201, 'app deleted successfully');
+    } catch (e) {
+      return errorHandler(false, 500, e);
+    }
   }
 }
