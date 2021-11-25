@@ -21,7 +21,7 @@ export class DevicesService {
         return errorHandler(false, 404, 'No devices found');
       }
 
-      return devices;
+      return successHandler(true, 200, 'Found', devices);
     } catch (e) {
       return errorHandler(false, 500, e);
     }
