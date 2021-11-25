@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { errorHandler, successHandler } from 'src/helpers/handlers';
 import CreateUserDto from './dto/create-user.dto';
 import UpdateUserDto from './dto/update-user.dto';
 import User from './user.entity';
@@ -16,46 +17,30 @@ export class UsersService {
     const users = await this.usersRepository.find();
 
     if (!users || users.length === 0) {
-      return {
-        sucess: false,
-        code: 404,
-        error: 'No users found',
-      };
+      return errorHandler(false, 404, 'No users found');
     }
 
-    return users;
+    return successHandler(true, 200, 'Found', users);
   }
 
   async getUniqueUser(id: string) {
     try {
       const uniqueUser = await this.usersRepository.findOne(id);
 
-      return uniqueUser;
+      return successHandler(true, 200, 'Found', uniqueUser);
     } catch (e) {
-      return {
-        sucess: false,
-        code: 500,
-        error: e,
-      };
+      return errorHandler(false, 500, e);
     }
   }
 
-  async createUser(newUser: CreateUserDto) {
+  async createUser(newUserBody: CreateUserDto) {
     try {
-      const createdUser = await this.usersRepository.create(newUser);
-      await this.usersRepository.save(createdUser);
+      const newUser = await this.usersRepository.create(newUserBody);
+      await this.usersRepository.save(newUser);
 
-      return {
-        success: true,
-        message: 'creted successfully',
-        createdUser: createdUser,
-      };
+      return successHandler(true, 200, 'User created successfully', newUser);
     } catch (e) {
-      return {
-        success: false,
-        code: 500,
-        error: e,
-      };
+      return errorHandler(false, 500, e);
     }
   }
 
@@ -63,18 +48,9 @@ export class UsersService {
     try {
       await this.usersRepository.update(userId, updatedUserBody)
 
-      return {
-        success: true,
-        code: 200,
-        message: 'User updated successfully'
-      }
-
+      return successHandler(true, 200, 'User updated successfully');
     } catch (e) {
-      return {
-        success: false,
-        code: 500,
-        error: e
-      }
+      return errorHandler(false, 500, e);
     }
   }
 
@@ -82,17 +58,9 @@ export class UsersService {
     try {
       await this.usersRepository.delete(userId);
 
-      return {
-        success: true,
-        code: 200,
-        message: 'User deleted successfully'
-      }
+      return successHandler(true, 200, 'User deleted successfully');
     } catch (e) {
-      return {
-        success: false,
-        code: 500,
-        error: e
-      }
+      return errorHandler(false, 500, e);
     }
   }
 }
