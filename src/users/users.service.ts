@@ -13,7 +13,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async getUsers(): Promise<{} | User[]> {
+  async getUsers(): Promise<{}> {
     const users = await this.usersRepository.find();
 
     if (!users || users.length === 0) {
@@ -23,9 +23,13 @@ export class UsersService {
     return successHandler(true, 200, 'Found', users);
   }
 
-  async getUniqueUser(id: string) {
+  async getUniqueUser(id: string): Promise<{}> {
     try {
       const uniqueUser = await this.usersRepository.findOne(id);
+
+      if (!uniqueUser) {
+        return errorHandler(false, 404, 'No user found with that id');
+      }
 
       return successHandler(true, 200, 'Found', uniqueUser);
     } catch (e) {
@@ -33,7 +37,7 @@ export class UsersService {
     }
   }
 
-  async createUser(newUserBody: CreateUserDto) {
+  async createUser(newUserBody: CreateUserDto): Promise<{}> {
     try {
       const newUser = await this.usersRepository.create(newUserBody);
       await this.usersRepository.save(newUser);
@@ -44,7 +48,7 @@ export class UsersService {
     }
   }
 
-  async updateUser(userId: string, updatedUserBody: UpdateUserDto) {
+  async updateUser(userId: string, updatedUserBody: UpdateUserDto): Promise<{}> {
     try {
       await this.usersRepository.update(userId, updatedUserBody)
 
@@ -54,7 +58,7 @@ export class UsersService {
     }
   }
 
-  async deleteUser(userId: string) {
+  async deleteUser(userId: string): Promise<{}> {
     try {
       await this.usersRepository.delete(userId);
 

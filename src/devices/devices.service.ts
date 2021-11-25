@@ -13,7 +13,7 @@ export class DevicesService {
     private devicesRepository: Repository<Devices>
   ) {}
 
-  async getDevices() {
+  async getDevices(): Promise<{} | Devices[]> {
     try {
       const devices = await this.devicesRepository.find();
 
@@ -27,7 +27,7 @@ export class DevicesService {
     }
   }
 
-  async getUniqueDevice(deviceId: string) {
+  async getUniqueDevice(deviceId: string): Promise<{}> {
     try {
       const uniqueDevice = await this.devicesRepository.findOne(deviceId);
 
@@ -42,7 +42,7 @@ export class DevicesService {
     }
   }
 
-  async createDevice(newDeviceBody: CreateDeviceDto) {
+  async createDevice(newDeviceBody: CreateDeviceDto): Promise<{}> {
     try {
       const newDevice = await this.devicesRepository.create(newDeviceBody);
 
@@ -54,7 +54,7 @@ export class DevicesService {
     }
   }
 
-  async updateDevice(updateDeviceBody: UpdateDeviceDto, deviceId: string) {
+  async updateDevice(updateDeviceBody: UpdateDeviceDto, deviceId: string): Promise<{}> {
     try {
       await this.devicesRepository.update(deviceId, updateDeviceBody);
 
@@ -64,7 +64,7 @@ export class DevicesService {
     }
   }
 
-  async deleteDevice(deviceId: string) {
+  async deleteDevice(deviceId: string): Promise<{}> {
     try {
       await this.devicesRepository.delete(deviceId);
 
