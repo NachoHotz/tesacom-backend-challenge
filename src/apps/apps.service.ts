@@ -51,7 +51,7 @@ export class AppsService {
     }
   }
 
-  async updateApp(updatedApp: UpdateAppDto, appId: number) {
+  async updateApp(updatedApp: UpdateAppDto, appId: number): Promise<{}> {
     try {
       await this.appsRepository.update(appId, updatedApp);
 
@@ -61,7 +61,7 @@ export class AppsService {
     }
   }
 
-  async deleteApp(appId: number) {
+  async deleteApp(appId: number): Promise<{}> {
     try {
       await this.appsRepository.delete(appId);
 
