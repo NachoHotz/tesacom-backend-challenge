@@ -6,7 +6,7 @@ export const errorHandler = (success: boolean, code: number, error: string) => {
   }
 }
 
-export const successHandler = (success: boolean, code: number, message: string, data: {} | []) => {
+export const successHandler = (success: boolean, code: number, message: string, data?: {} | []) => {
   return {
     success: success,
     code: code,
