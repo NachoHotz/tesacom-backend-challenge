@@ -1,15 +1,15 @@
-export const errorHandler = (success: boolean, code: number, error: string) => {
+export const errorHandler = (success: boolean, code: number, error: string): {} => {
   return {
     success: success,
-    code: code,
+    statusCode: code,
     error: error
   }
 }
 
-export const successHandler = (success: boolean, code: number, message: string, data?: {} | []) => {
+export const successHandler = (success: boolean, code: number, message: string, data?: {} | []): {} => {
   return {
     success: success,
-    code: code,
+    statusCode: code,
     message: message,
     data: data
   }
