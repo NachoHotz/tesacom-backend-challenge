@@ -20,8 +20,6 @@ For the app to work properly, you must create a .env file in the root directory 
 
 `DB_NAME`
 
-`JWT_SECRET`
-
 The rest is managed by the application.
 
 ## Installation
