@@ -21,6 +21,7 @@ export class AppsController {
     return await this.appsService.getUniqueApp(parseInt(appsId));
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async createApp(@Body() newApp: CreateAppsDto) {
     return await this.appsService.createApp(newApp);
