@@ -4,7 +4,7 @@
 
 Backend Challenge for the position of Backend Developer at Tesacom.
 
-App made with `Nest.js` as backend framework, `TypeORM` as database managment, `MySQL` as the database itself, and `JWT` for user authentication. 
+API made with `Nest.js` as backend framework, `TypeORM` as database managment, `MySQL` as the database itself, and `JWT` for user authentication. 
 
 ### IMPORTANT
 
