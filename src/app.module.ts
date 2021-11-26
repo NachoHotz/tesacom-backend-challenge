@@ -6,6 +6,7 @@ import { DevicesController } from './devices/devices.controller';
 import { AppsController } from './apps/apps.controller';
 import { AppsModule } from './apps/apps.module';
 import { DevicesModule } from './devices/devices.module';
+import { LoginModule } from './login/login.module';
 import User from './users/user.entity';
 import Apps from './apps/apps.entity';
 import Devices from './devices/devices.entity';
@@ -25,6 +26,7 @@ import Devices from './devices/devices.entity';
     UsersModule,
     AppsModule,
     DevicesModule,
+    LoginModule,
   ],
   controllers: [UsersController, DevicesController, AppsController],
   providers: [],
