@@ -21,7 +21,6 @@ export class DevicesController {
     return await this.devicesService.getUniqueDevice(deviceId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post()
   createDevice(@Body() newDevice: CreateDeviceDto) {
     return this.devicesService.createDevice(newDevice)

@@ -20,7 +20,6 @@ export class UsersController {
     return await this.usersService.getUniqueUser(email);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post()
   async createUser(@Body() newUser: CreateUserDto) {
     return await this.usersService.createUser(newUser);
