@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { DevicesController } from './devices/devices.controller';
@@ -7,21 +8,15 @@ import { AppsController } from './apps/apps.controller';
 import { AppsModule } from './apps/apps.module';
 import { DevicesModule } from './devices/devices.module';
 import { LoginModule } from './login/login.module';
-import User from './users/user.entity';
-import Apps from './apps/apps.entity';
-import Devices from './devices/devices.entity';
+import { config } from './config';
+import DatabaseConfig from './database.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'nacho',
-      password: 'sempron3',
-      database: 'tesacom',
-      entities: [User, Apps, Devices],
-      synchronize: true,
+    ConfigModule.forRoot({ isGlobal: true, load: [config] }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useClass: DatabaseConfig,
     }),
     UsersModule,
     AppsModule,
