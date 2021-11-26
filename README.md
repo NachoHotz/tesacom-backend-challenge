@@ -24,7 +24,27 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Backend Challenge for the position of Backend Developer at Tesacom.
+
+App made with `Nest.js` as backend framework, `TypeORM` as database managment, `MySQL` as the database itself, and `JWT` for user authentication. 
+
+# IMPORTANT
+
+For the app to work properly, you must create a .env file in the root directory with the following variables:
+
+`DB_USER`
+
+`DB_PASSWORD`
+
+`DB_HOST`
+
+`DB_PORT`
+
+`DB_NAME`
+
+`JWT_SECRET`
+
+The rest is managed by the application.
 
 ## Installation
 
@@ -44,30 +64,4 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
 Nest is [MIT licensed](LICENSE).
