@@ -4,10 +4,15 @@ import { LoginService } from './login.service';
 import { UsersModule } from 'src/users/users.module';
 import LoginController from './login.controller';
 import JwtStrategy from './strategy/jwt.strategy';
+import {ConfigModule, ConfigService} from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule, JwtModule.register({
-    secret: 'secret',
+  imports: [UsersModule, JwtModule.registerAsync({
+    imports: [ConfigModule],
+    useFactory: async (configService: ConfigService) => ({
+      secret: configService.get<string>('jwtSecret')
+    }),
+    inject: [ConfigService],
   })],
   controllers: [LoginController],
   providers: [LoginService, JwtStrategy],
