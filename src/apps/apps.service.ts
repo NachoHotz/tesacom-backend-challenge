@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { errorHandler, successHandler } from 'src/helpers/handlers';
+import { successHandler } from 'src/helpers/handlers';
 import Apps from './apps.entity';
 import CreateAppsDto from './dto/create-apps.dto';
 import UpdateAppDto from './dto/update-apps.dto';
@@ -15,13 +15,12 @@ export class AppsService {
       const apps = await this.appsRepository.find();
 
       if (!apps || apps.length === 0) {
-        return errorHandler(false, 404, 'No apps found');
+        return new NotFoundException('no apps found');
       }
 
       return successHandler(true, 201, 'Found', apps);
-
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -30,13 +29,12 @@ export class AppsService {
       const uniqueApp = await this.appsRepository.findOne(appsId);
 
       if (!uniqueApp) {
-        return errorHandler(false, 404, 'No app found with that id');
+        return new NotFoundException('no app found with that id');
       }
 
       return successHandler(true, 201, 'Found', uniqueApp);
-
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -47,7 +45,7 @@ export class AppsService {
 
       return successHandler(true, 201, 'created successfully', newApp);
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -57,7 +55,7 @@ export class AppsService {
 
       return successHandler(true, 201, 'updated successfully');
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -67,7 +65,7 @@ export class AppsService {
 
       return successHandler(true, 201, 'app deleted successfully');
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 }

@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Devices from './devices.entity';
 import CreateDeviceDto from './dto/create-devices.dto';
 import UpdateDeviceDto from './dto/update-devices.dto';
-import { errorHandler, successHandler } from 'src/helpers/handlers';
+import { successHandler } from 'src/helpers/handlers';
 
 @Injectable()
 export class DevicesService {
@@ -18,12 +18,12 @@ export class DevicesService {
       const devices = await this.devicesRepository.find();
 
       if (!devices || devices.length === 0) {
-        return errorHandler(false, 404, 'No devices found');
+        return new NotFoundException('no devices found');
       }
 
       return successHandler(true, 200, 'Found', devices);
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -32,13 +32,12 @@ export class DevicesService {
       const uniqueDevice = await this.devicesRepository.findOne(deviceId);
 
       if (!uniqueDevice) {
-        return errorHandler(false, 404, 'No device found with that id')
+        return new NotFoundException('no device found with that serial number');
       }
 
       return successHandler(true, 200, 'Device found', uniqueDevice);
-
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -50,7 +49,7 @@ export class DevicesService {
 
       return successHandler(true, 200, 'Device created successfully', newDevice)
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -60,7 +59,7 @@ export class DevicesService {
 
       return successHandler(true, 200, 'device updated successfully');
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -70,7 +69,7 @@ export class DevicesService {
 
       return successHandler(true, 200, 'device deleted successfully');
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 }

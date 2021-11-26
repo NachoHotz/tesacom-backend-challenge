@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { errorHandler, successHandler } from 'src/helpers/handlers';
+import { successHandler } from 'src/helpers/handlers';
 import CreateUserDto from './dto/create-user.dto';
 import UpdateUserDto from './dto/update-user.dto';
 import User from './user.entity';
@@ -17,7 +17,7 @@ export class UsersService {
     const users = await this.usersRepository.find();
 
     if (!users || users.length === 0) {
-      return errorHandler(false, 404, 'No users found');
+      return new NotFoundException('No users found');
     }
 
     return successHandler(true, 200, 'Found', users);
@@ -28,12 +28,12 @@ export class UsersService {
       const uniqueUser = await this.usersRepository.findOne(id);
 
       if (!uniqueUser) {
-        return errorHandler(false, 404, 'No user found with that id');
+        return new NotFoundException('No user found wth that email');
       }
 
       return successHandler(true, 200, 'Found', uniqueUser);
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -44,7 +44,7 @@ export class UsersService {
 
       return successHandler(true, 200, 'User created successfully', newUser);
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -54,7 +54,7 @@ export class UsersService {
 
       return successHandler(true, 200, 'User updated successfully');
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 
@@ -64,7 +64,7 @@ export class UsersService {
 
       return successHandler(true, 200, 'User deleted successfully');
     } catch (e) {
-      return errorHandler(false, 500, e);
+      return new Error(e);
     }
   }
 }
