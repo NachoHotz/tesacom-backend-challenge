@@ -7,7 +7,7 @@ import JwtStrategy from './strategy/jwt.strategy';
 
 @Module({
   imports: [UsersModule, JwtModule.register({
-    secret: `${process.env.JWT_SECRET}`,
+    secret: 'secret',
   })],
   controllers: [LoginController],
   providers: [LoginService, JwtStrategy],
