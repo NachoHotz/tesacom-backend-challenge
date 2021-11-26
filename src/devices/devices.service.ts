@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import Devices from './devices.entity';
 import CreateDeviceDto from './dto/create-devices.dto';
 import UpdateDeviceDto from './dto/update-devices.dto';
-import { successHandler } from 'src/helpers/handlers';
+import { successHandler } from 'src/helpers/successHandler';
 
 @Injectable()
 export class DevicesService {

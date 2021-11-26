@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { successHandler } from 'src/helpers/handlers';
+import { successHandler } from 'src/helpers/successHandler';
 import Apps from './apps.entity';
 import CreateAppsDto from './dto/create-apps.dto';
 import UpdateAppDto from './dto/update-apps.dto';
