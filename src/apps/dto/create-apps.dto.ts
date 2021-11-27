@@ -8,6 +8,7 @@ export default class CreateAppsDto {
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   url: string;
 
   @IsString()
