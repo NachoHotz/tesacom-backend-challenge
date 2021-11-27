@@ -42,6 +42,7 @@ export class UsersController {
     @Param('userEmail') userEmail: string,
     @Body() updatedUserBody: UpdateUserDto,
   ) {
+    updatedUserBody.password = await bcrypt.hash(updatedUserBody.password, 12);
     return await this.usersService.updateUser(userEmail, updatedUserBody);
   }
 
