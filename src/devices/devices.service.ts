@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { successHandler } from 'src/helpers/successHandler';
@@ -43,6 +43,9 @@ export class DevicesService {
 
   async createDevice(newDeviceBody: CreateDeviceDto): Promise<{}> {
     try {
+      const deviceExists = await this.devicesRepository.findOne(newDeviceBody.serial);
+      if (deviceExists) return new BadRequestException('Device already registered with that serial');
+
       const newDevice = await this.devicesRepository.create(newDeviceBody);
 
       await this.devicesRepository.save(newDevice);
@@ -63,6 +66,10 @@ export class DevicesService {
     deviceId: string,
   ): Promise<{}> {
     try {
+      const deviceExists = await this.devicesRepository.findOne(deviceId);
+
+      if (!deviceExists) return new BadRequestException('Device doesn´t exist');
+
       await this.devicesRepository.update(deviceId, updateDeviceBody);
 
       return successHandler(true, 200, 'device updated successfully');
@@ -73,6 +80,10 @@ export class DevicesService {
 
   async deleteDevice(deviceId: string): Promise<{}> {
     try {
+      const deviceExists = await this.devicesRepository.findOne(deviceId);
+
+      if (!deviceExists) return new BadRequestException('Device doesn´t exists or has already been deleted');
+
       await this.devicesRepository.delete(deviceId);
 
       return successHandler(true, 200, 'device deleted successfully');
