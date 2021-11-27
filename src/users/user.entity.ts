@@ -4,7 +4,6 @@ import {
   PrimaryColumn,
   CreateDateColumn,
   BeforeInsert,
-  BeforeUpdate,
 } from 'typeorm';
 import { hash } from 'bcrypt';
 
@@ -26,7 +25,6 @@ export default class User {
   created: string;
 
   @BeforeInsert()
-  @BeforeUpdate()
   async hashPassword() {
     if (!this.password) return;
     this.password = await hash(this.password, 12);

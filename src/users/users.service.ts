@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { successHandler } from 'src/helpers/successHandler';
@@ -55,6 +55,10 @@ export class UsersService {
 
   async createUser(newUserBody: CreateUserDto): Promise<{}> {
     try {
+      const userExists = await this.usersRepository.findOne(newUserBody.email);
+
+      if (userExists) return new BadRequestException('User already registered with that email');
+
       const newUser = await this.usersRepository.create(newUserBody);
       const savedUser = await this.usersRepository.save(newUser);
 
@@ -69,9 +73,14 @@ export class UsersService {
     updatedUserBody: UpdateUserDto,
   ): Promise<{}> {
     try {
+      const userExists = await this.usersRepository.findOne(userId);
+      if (!userExists) return new BadRequestException('No user registered with that email');
+
       await this.usersRepository.update(userId, updatedUserBody);
 
-      return successHandler(true, 200, 'User updated successfully');
+      const updatedUser = await this.usersRepository.findOne(userId);
+
+      return successHandler(true, 200, 'User updated successfully', updatedUser );
     } catch (e) {
       return new Error(e);
     }
@@ -79,6 +88,10 @@ export class UsersService {
 
   async deleteUser(userId: string): Promise<{}> {
     try {
+      const userExists = await this.usersRepository.findOne(userId);
+
+      if (!userExists) return new BadRequestException('User doesn´t exists or has already been deleted');
+
       await this.usersRepository.delete(userId);
 
       return successHandler(true, 200, 'User deleted successfully');

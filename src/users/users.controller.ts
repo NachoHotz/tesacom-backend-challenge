@@ -12,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
 import CreateUserDto from './dto/create-user.dto';
 import UpdateUserDto from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Controller('users')
 export class UsersController {
@@ -40,6 +41,11 @@ export class UsersController {
     @Param('userEmail') userEmail: string,
     @Body() updatedUserBody: UpdateUserDto,
   ) {
+    if (updatedUserBody.password)
+      updatedUserBody.password = await bcrypt.hash(
+        updatedUserBody.password,
+        12,
+      );
     return await this.usersService.updateUser(userEmail, updatedUserBody);
   }
 
