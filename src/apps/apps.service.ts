@@ -44,7 +44,9 @@ export class AppsService {
     try {
       const appExists = await this.appsRepository.findOne(newAppBody.id);
 
-      if (appExists) return new BadRequestException('app already registered with that id');
+      if (appExists) {
+        return new BadRequestException('app already registered with that id');
+      }
 
       const newApp = await this.appsRepository.create(newAppBody);
       await this.appsRepository.save(newApp);
@@ -59,7 +61,9 @@ export class AppsService {
     try {
       const appExists = await this.appsRepository.findOne(appId);
 
-      if (!appExists) return new BadRequestException('no app found with that id');
+      if (!appExists) {
+        return new BadRequestException('no app found with that id');
+      }
 
       await this.appsRepository.update(appId, updatedApp);
 
@@ -73,7 +77,9 @@ export class AppsService {
     try {
       const appExists = await this.appsRepository.findOne(appId);
 
-      if (!appExists) return new BadRequestException('app doesn´t exist or has benn already deleted');
+      if (!appExists) {
+        return new BadRequestException('app doesn´t exist or has benn already deleted');
+      }
 
       await this.appsRepository.delete(appId);
 

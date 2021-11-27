@@ -31,13 +31,13 @@ export class DevicesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  createDevice(@Body() newDevice: CreateDeviceDto) {
+  async createDevice(@Body() newDevice: CreateDeviceDto) {
     return this.devicesService.createDevice(newDevice);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':deviceId')
-  updateDevice(
+  async updateDevice(
     @Body() updatedDevice: UpdateDeviceDto,
     @Param('deviceId') deviceId: string,
   ) {
@@ -46,7 +46,7 @@ export class DevicesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':deviceId')
-  deleteDevice(@Param('deviceId') deviceId: string) {
+  async deleteDevice(@Param('deviceId') deviceId: string) {
     return this.devicesService.deleteDevice(deviceId);
   }
 }

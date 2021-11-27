@@ -41,11 +41,12 @@ export class UsersController {
     @Param('userEmail') userEmail: string,
     @Body() updatedUserBody: UpdateUserDto,
   ) {
-    if (updatedUserBody.password)
+    if (updatedUserBody.password) {
       updatedUserBody.password = await bcrypt.hash(
         updatedUserBody.password,
         12,
       );
+    }
     return await this.usersService.updateUser(userEmail, updatedUserBody);
   }
 
