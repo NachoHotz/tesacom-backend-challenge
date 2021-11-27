@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { successHandler } from 'src/helpers/successHandler';
@@ -42,6 +42,10 @@ export class AppsService {
 
   async createApp(newAppBody: CreateAppsDto): Promise<{}> {
     try {
+      const appExists = await this.appsRepository.findOne(newAppBody.id);
+
+      if (appExists) return new BadRequestException('app already registered with that id');
+
       const newApp = await this.appsRepository.create(newAppBody);
       await this.appsRepository.save(newApp);
 
@@ -53,6 +57,10 @@ export class AppsService {
 
   async updateApp(updatedApp: UpdateAppDto, appId: number): Promise<{}> {
     try {
+      const appExists = await this.appsRepository.findOne(appId);
+
+      if (!appExists) return new BadRequestException('no app found with that id');
+
       await this.appsRepository.update(appId, updatedApp);
 
       return successHandler(true, 201, 'updated successfully');
@@ -63,6 +71,10 @@ export class AppsService {
 
   async deleteApp(appId: number): Promise<{}> {
     try {
+      const appExists = await this.appsRepository.findOne(appId);
+
+      if (!appExists) return new BadRequestException('app doesn´t exist or has benn already deleted');
+
       await this.appsRepository.delete(appId);
 
       return successHandler(true, 201, 'app deleted successfully');
