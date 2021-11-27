@@ -1,19 +1,19 @@
-import { Entity, Column, CreateDateColumn, PrimaryColumn } from "typeorm";
+import { Entity, Column, CreateDateColumn, PrimaryColumn } from 'typeorm';
 
 @Entity('devices')
 export default class Devices {
   @PrimaryColumn({ unique: true })
-  serial: string
+  serial: string;
 
   @Column({ type: 'varchar', length: 255 })
-  alias: string
+  alias: string;
 
   @Column({ type: 'varchar', length: 255 })
-  model: string
+  model: string;
 
   @Column({ type: 'integer' })
-  code: number
+  code: number;
 
   @CreateDateColumn({ type: 'timestamp' })
-  created: string
+  created: string;
 }

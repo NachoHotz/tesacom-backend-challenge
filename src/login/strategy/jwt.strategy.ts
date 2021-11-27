@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 

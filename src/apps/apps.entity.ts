@@ -1,19 +1,24 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity('apps')
 export default class Apps {
   @PrimaryGeneratedColumn({ type: 'integer' })
-  id: number
+  id: number;
 
   @Column({ type: 'varchar', length: 255 })
-  name: string
+  name: string;
 
   @Column({ type: 'varchar', length: 255 })
-  url: string
+  url: string;
 
   @Column({ type: 'varchar', length: 255 })
-  icon: string
+  icon: string;
 
   @CreateDateColumn({ type: 'timestamp' })
-  created: Date
+  created: Date;
 }

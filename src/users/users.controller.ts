@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Param, Post, Put, Delete, UseGuards } from '@nestjs/common';
-import {AuthGuard} from '@nestjs/passport';
-import * as bcrypt from 'bcrypt';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { UsersService } from './users.service';
 import CreateUserDto from './dto/create-user.dto';
 import UpdateUserDto from './dto/update-user.dto';
-import { UsersService } from './users.service';
+import * as bcrypt from 'bcrypt';
 
 @Controller('users')
 export class UsersController {
@@ -29,13 +38,16 @@ export class UsersController {
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':userEmail')
-  async updateUser(@Param('userEmail') userEmail: string, @Body() updatedUserBody: UpdateUserDto) {
+  async updateUser(
+    @Param('userEmail') userEmail: string,
+    @Body() updatedUserBody: UpdateUserDto,
+  ) {
     return await this.usersService.updateUser(userEmail, updatedUserBody);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':userEmail')
-  async deleteUser(@Param('userEmail') userEmail: string)  {
+  async deleteUser(@Param('userEmail') userEmail: string) {
     return await this.usersService.deleteUser(userEmail);
   }
 }

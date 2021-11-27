@@ -1,16 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { successHandler } from 'src/helpers/successHandler';
 import Devices from './devices.entity';
 import CreateDeviceDto from './dto/create-devices.dto';
 import UpdateDeviceDto from './dto/update-devices.dto';
-import { successHandler } from 'src/helpers/successHandler';
 
 @Injectable()
 export class DevicesService {
   constructor(
     @InjectRepository(Devices)
-    private devicesRepository: Repository<Devices>
+    private devicesRepository: Repository<Devices>,
   ) {}
 
   async getDevices(): Promise<{} | Devices[]> {
@@ -47,13 +47,21 @@ export class DevicesService {
 
       await this.devicesRepository.save(newDevice);
 
-      return successHandler(true, 200, 'Device created successfully', newDevice)
+      return successHandler(
+        true,
+        200,
+        'Device created successfully',
+        newDevice,
+      );
     } catch (e) {
       return new Error(e);
     }
   }
 
-  async updateDevice(updateDeviceBody: UpdateDeviceDto, deviceId: string): Promise<{}> {
+  async updateDevice(
+    updateDeviceBody: UpdateDeviceDto,
+    deviceId: string,
+  ): Promise<{}> {
     try {
       await this.devicesRepository.update(deviceId, updateDeviceBody);
 

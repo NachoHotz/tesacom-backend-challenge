@@ -1,8 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import CreateAppsDto from './dto/create-apps.dto';
 import { AppsService } from './apps.service';
+import CreateAppsDto from './dto/create-apps.dto';
 import UpdateAppDto from './dto/update-apps.dto';
 
 @Controller('apps')
@@ -29,7 +37,10 @@ export class AppsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':appId')
-  async updateApp(@Body() updatedApp: UpdateAppDto, @Param('appId') appId: string) {
+  async updateApp(
+    @Body() updatedApp: UpdateAppDto,
+    @Param('appId') appId: string,
+  ) {
     return await this.appsService.updateApp(updatedApp, parseInt(appId));
   }
 

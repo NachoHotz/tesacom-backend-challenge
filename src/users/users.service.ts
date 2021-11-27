@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 import { successHandler } from 'src/helpers/successHandler';
 import CreateUserDto from './dto/create-user.dto';
 import UpdateUserDto from './dto/update-user.dto';
-import User from './user.entity';
 import ValidateUserDto from 'src/login/dto/validate-user.dto';
+import User from './user.entity';
 
 @Injectable()
 export class UsersService {
@@ -44,7 +44,9 @@ export class UsersService {
 
   async getValidatedUser(userCredentials: ValidateUserDto): Promise<User> {
     try {
-      const userValidated = await this.usersRepository.findOne(userCredentials.email);
+      const userValidated = await this.usersRepository.findOne(
+        userCredentials.email,
+      );
       return userValidated;
     } catch (e) {
       console.log(e);
@@ -62,7 +64,10 @@ export class UsersService {
     }
   }
 
-  async updateUser( userId: string, updatedUserBody: UpdateUserDto,): Promise<{}> {
+  async updateUser(
+    userId: string,
+    updatedUserBody: UpdateUserDto,
+  ): Promise<{}> {
     try {
       await this.usersRepository.update(userId, updatedUserBody);
 
