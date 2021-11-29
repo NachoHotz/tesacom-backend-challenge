@@ -12,7 +12,7 @@ export class AppsService {
     @InjectRepository(Apps) private appsRepository: Repository<Apps>,
   ) {}
 
-  async getApps(): Promise<{}> {
+  async getApps(): Promise<Error | object> {
     try {
       const apps = await this.appsRepository.find();
 
@@ -26,7 +26,7 @@ export class AppsService {
     }
   }
 
-  async getUniqueApp(appsId: number): Promise<{}> {
+  async getUniqueApp(appsId: number): Promise<Error | object> {
     try {
       const uniqueApp = await this.appsRepository.findOne(appsId);
 
@@ -40,7 +40,7 @@ export class AppsService {
     }
   }
 
-  async createApp(newAppBody: CreateAppsDto): Promise<{}> {
+  async createApp(newAppBody: CreateAppsDto): Promise<Error | object> {
     try {
       const appExists = await this.appsRepository.findOne(newAppBody.id);
 
@@ -57,7 +57,7 @@ export class AppsService {
     }
   }
 
-  async updateApp(updatedApp: UpdateAppDto, appId: number): Promise<{}> {
+  async updateApp(updatedApp: UpdateAppDto, appId: number): Promise<Error | object> {
     try {
       const appExists = await this.appsRepository.findOne(appId);
 
@@ -67,13 +67,13 @@ export class AppsService {
 
       await this.appsRepository.update(appId, updatedApp);
 
-      return successHandler(true, 201, 'updated successfully');
+      return successHandler(true, 201, 'updated successfully', appExists);
     } catch (e) {
       return new Error(e);
     }
   }
 
-  async deleteApp(appId: number): Promise<{}> {
+  async deleteApp(appId: number): Promise<Error | object> {
     try {
       const appExists = await this.appsRepository.findOne(appId);
 
@@ -83,7 +83,7 @@ export class AppsService {
 
       await this.appsRepository.delete(appId);
 
-      return successHandler(true, 201, 'app deleted successfully');
+      return successHandler(true, 201, 'app deleted successfully', appExists);
     } catch (e) {
       return new Error(e);
     }

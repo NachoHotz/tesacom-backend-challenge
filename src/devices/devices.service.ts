@@ -17,7 +17,7 @@ export class DevicesService {
     private devicesRepository: Repository<Devices>,
   ) {}
 
-  async getDevices(): Promise<{} | Devices[]> {
+  async getDevices(): Promise<Error | object> {
     try {
       const devices = await this.devicesRepository.find();
 
@@ -31,7 +31,7 @@ export class DevicesService {
     }
   }
 
-  async getUniqueDevice(deviceId: string): Promise<{}> {
+  async getUniqueDevice(deviceId: string): Promise<Error | object> {
     try {
       const uniqueDevice = await this.devicesRepository.findOne(deviceId);
 
@@ -45,7 +45,7 @@ export class DevicesService {
     }
   }
 
-  async createDevice(newDeviceBody: CreateDeviceDto): Promise<{}> {
+  async createDevice(newDeviceBody: CreateDeviceDto): Promise<Error | object> {
     try {
       const deviceExists = await this.devicesRepository.findOne( newDeviceBody.serial);
 
@@ -66,7 +66,7 @@ export class DevicesService {
   async updateDevice(
     updateDeviceBody: UpdateDeviceDto,
     deviceId: string,
-  ): Promise<{}> {
+  ): Promise<Error | object> {
     try {
       const deviceExists = await this.devicesRepository.findOne(deviceId);
 
@@ -76,23 +76,23 @@ export class DevicesService {
 
       await this.devicesRepository.update(deviceId, updateDeviceBody);
 
-      return successHandler(true, 200, 'device updated successfully');
+      return successHandler(true, 200, 'device updated successfully', deviceExists);
     } catch (e) {
       return new Error(e);
     }
   }
 
-  async deleteDevice(deviceId: string): Promise<{}> {
+  async deleteDevice(deviceId: string): Promise<Error | object> {
     try {
       const deviceExists = await this.devicesRepository.findOne(deviceId);
 
       if (!deviceExists) {
-        return new BadRequestException( 'Device doesn´t exists or has already been deleted');
+        return new BadRequestException('Device doesn´t exists or has already been deleted');
       }
 
       await this.devicesRepository.delete(deviceId);
 
-      return successHandler(true, 200, 'device deleted successfully');
+      return successHandler(true, 200, 'device deleted successfully', deviceExists);
     } catch (e) {
       return new Error(e);
     }

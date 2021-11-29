@@ -18,7 +18,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async getUsers(): Promise<{}> {
+  async getUsers(): Promise<Error | object> {
     try {
       const users = await this.usersRepository.find();
 
@@ -26,13 +26,13 @@ export class UsersService {
         return new NotFoundException('No users found');
       }
 
-      return successHandler(true, 201, 'found', users);
+      return successHandler(true, 200, 'found', users);
     } catch (e) {
       return new Error(e);
     }
   }
 
-  async getUniqueUser(id: string): Promise<{}> {
+  async getUniqueUser(id: string): Promise<Error | object> {
     try {
       const uniqueUser = await this.usersRepository.findOne(id);
 
@@ -57,7 +57,7 @@ export class UsersService {
     }
   }
 
-  async createUser(newUserBody: CreateUserDto): Promise<{}> {
+  async createUser(newUserBody: CreateUserDto): Promise<Error | object> {
     try {
       const userExists = await this.usersRepository.findOne(newUserBody.email);
 
@@ -77,7 +77,7 @@ export class UsersService {
   async updateUser(
     userId: string,
     updatedUserBody: UpdateUserDto,
-  ): Promise<{}> {
+  ): Promise<Error | object> {
     try {
       const userExists = await this.usersRepository.findOne(userId);
 
@@ -95,7 +95,7 @@ export class UsersService {
     }
   }
 
-  async deleteUser(userId: string): Promise<{}> {
+  async deleteUser(userId: string): Promise<Error | object> {
     try {
       const userExists = await this.usersRepository.findOne(userId);
 
@@ -105,7 +105,7 @@ export class UsersService {
 
       await this.usersRepository.delete(userId);
 
-      return successHandler(true, 200, 'User deleted successfully');
+      return successHandler(true, 200, 'User deleted successfully', userExists);
     } catch (e) {
       return new Error(e);
     }

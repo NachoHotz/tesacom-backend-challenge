@@ -2,8 +2,8 @@ export const successHandler = (
   success: boolean,
   code: number,
   message: string,
-  data?: {} | [],
-): {} => {
+  data?: object | [],
+): object => {
   return {
     success: success,
     statusCode: code,
