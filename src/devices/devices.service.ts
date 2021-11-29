@@ -22,10 +22,10 @@ export class DevicesService {
       const devices = await this.devicesRepository.find();
 
       if (!devices || devices.length === 0) {
-        return new NotFoundException('no devices found');
+        return new NotFoundException('No devices found');
       }
 
-      return successHandler(true, 200, 'Found', devices);
+      return successHandler(true, 200, 'Devices found', devices);
     } catch (e) {
       return new Error(e);
     }
@@ -36,7 +36,7 @@ export class DevicesService {
       const uniqueDevice = await this.devicesRepository.findOne(deviceId);
 
       if (!uniqueDevice) {
-        return new NotFoundException('no device found with that serial number');
+        return new NotFoundException(`No device found with serial number ${deviceId}`);
       }
 
       return successHandler(true, 200, 'Device found', uniqueDevice);
@@ -50,7 +50,7 @@ export class DevicesService {
       const deviceExists = await this.devicesRepository.findOne( newDeviceBody.serial);
 
       if (deviceExists) {
-        return new BadRequestException( 'Device already registered with that serial');
+        return new BadRequestException(`Device already registered with serial number ${newDeviceBody.serial}`);
       }
 
       const newDevice = await this.devicesRepository.create(newDeviceBody);
@@ -71,12 +71,12 @@ export class DevicesService {
       const deviceExists = await this.devicesRepository.findOne(deviceId);
 
       if (!deviceExists) {
-        return new BadRequestException('Device doesn´t exist');
+        return new BadRequestException(`No device found with serial number ${deviceId} to edit`);
       }
 
       await this.devicesRepository.update(deviceId, updateDeviceBody);
 
-      return successHandler(true, 200, 'device updated successfully', deviceExists);
+      return successHandler(true, 200, 'Device updated successfully', deviceExists);
     } catch (e) {
       return new Error(e);
     }
@@ -92,7 +92,7 @@ export class DevicesService {
 
       await this.devicesRepository.delete(deviceId);
 
-      return successHandler(true, 200, 'device deleted successfully', deviceExists);
+      return successHandler(true, 200, 'Device deleted successfully', deviceExists);
     } catch (e) {
       return new Error(e);
     }

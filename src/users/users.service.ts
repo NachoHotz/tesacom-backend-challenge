@@ -27,7 +27,7 @@ export class UsersService {
  @return object - an object with the following properties:
  - success: boolean - true
  - code: number - 200
- - message: string - found
+ - message: string - Users found
  - data: array of Users
 */
   async getUsers(): Promise<object | Error> {
@@ -38,7 +38,7 @@ export class UsersService {
         return new NotFoundException('No users found');
       }
 
-      return successHandler(true, 200, 'found', users);
+      return successHandler(true, 200, 'Users found', users);
     } catch (e) {
       return new Error(e);
     }
@@ -54,7 +54,7 @@ export class UsersService {
   @returns object - an object with the following properties:
   - success: boolean - true
   - code: number - 200
-  - message: string - found
+  - message: string - User found
   - data: object - unique User object
 */
   async getUniqueUser(userId: ValidateUserParamsDto): Promise<object | Error> {
@@ -62,10 +62,10 @@ export class UsersService {
       const uniqueUser = await this.usersRepository.findOne(userId);
 
       if (!uniqueUser) {
-        return new NotFoundException('No user found wth that email');
+        return new NotFoundException(`No user found with email ${userId.email}`);
       }
 
-      return successHandler(true, 201, 'Found', uniqueUser);
+      return successHandler(true, 201, 'User found', uniqueUser);
     } catch (e) {
       return new Error(e);
     }
@@ -111,7 +111,7 @@ export class UsersService {
       const userExists = await this.usersRepository.findOne(newUserBody.email);
 
       if (userExists) {
-        return new BadRequestException('User already registered with that email');
+        return new BadRequestException(`User already registered with email ${newUserBody.email}`);
       }
 
       const newUser = await this.usersRepository.create(newUserBody);
@@ -131,7 +131,7 @@ export class UsersService {
       const userExists = await this.usersRepository.findOne(userId);
 
       if (!userExists) {
-        return new BadRequestException('No user registered with that email');
+        return new BadRequestException(`No user registered with email ${userId.email}`);
       }
 
       await this.usersRepository.update(userId, updatedUserBody);
