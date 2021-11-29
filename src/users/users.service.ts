@@ -9,6 +9,7 @@ import { successHandler } from 'src/helpers/successHandler';
 import CreateUserDto from './dto/create-user.dto';
 import UpdateUserDto from './dto/update-user.dto';
 import ValidateUserDto from 'src/login/dto/validate-user.dto';
+import ValidateUserParamsDto from './dto/validate-params.dto';
 import User from './user.entity';
 
 @Injectable()
@@ -18,7 +19,18 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async getUsers(): Promise<Error | object> {
+/**
+ Returns all of the users from the database.
+
+ If there are no users found, it returns an error of type NotFoundException.
+
+ @return object - an object with the following properties:
+ - success: boolean - true
+ - code: number - 200
+ - message: string - found
+ - data: array of Users
+*/
+  async getUsers(): Promise<object | Error> {
     try {
       const users = await this.usersRepository.find();
 
@@ -32,9 +44,22 @@ export class UsersService {
     }
   }
 
-  async getUniqueUser(id: string): Promise<Error | object> {
+/**
+ * Returns an unique user from the database.
+ *
+ * If there is no user found, it returns an error of type NotFoundException.
+ *
+ *@param id string - the user id to search. The id is the email of the user.
+
+  @returns object - an object with the following properties:
+  - success: boolean - true
+  - code: number - 200
+  - message: string - found
+  - data: object - unique User object
+*/
+  async getUniqueUser(userId: ValidateUserParamsDto): Promise<object | Error> {
     try {
-      const uniqueUser = await this.usersRepository.findOne(id);
+      const uniqueUser = await this.usersRepository.findOne(userId);
 
       if (!uniqueUser) {
         return new NotFoundException('No user found wth that email');
@@ -57,7 +82,31 @@ export class UsersService {
     }
   }
 
-  async createUser(newUserBody: CreateUserDto): Promise<Error | object> {
+  /**
+   * Creates a new instance of a user in the database.
+   *
+   * @param CreateUserDto - newUserBody - an object containing of all the user infomrmation for its creation.
+   * It has the following properties:
+   * - name: string - first name of the user
+   * - lastname: string
+   * - email: string
+   * - password: string - the password is hashed before being inserted in the database.
+   * - created: date
+   *
+   * All of the user properties are validated before being created.
+   *
+   * If one of the properties is not valid, it will return an Error object with information of why the property is not valid.
+   *
+   * If there is a property that is not present in the CreateUserDto, it will be ignored by this method, and not inserted into the new User instance.
+   *
+   * @returns Error - if there is a user in the database with the same email as the one to be created, it will return an error of type BadRequestException
+   * @returns object - if the request is successful, it will return an object with the following properties:
+   * - success: boolean - true
+   * - code: number - 201
+   * - message: string - user created successfully
+   * - data: object - the new created user
+  */
+  async createUser(newUserBody: CreateUserDto): Promise<object | Error> {
     try {
       const userExists = await this.usersRepository.findOne(newUserBody.email);
 
@@ -75,9 +124,9 @@ export class UsersService {
   }
 
   async updateUser(
-    userId: string,
+    userId: ValidateUserParamsDto,
     updatedUserBody: UpdateUserDto,
-  ): Promise<Error | object> {
+  ): Promise<object | Error> {
     try {
       const userExists = await this.usersRepository.findOne(userId);
 
@@ -95,7 +144,7 @@ export class UsersService {
     }
   }
 
-  async deleteUser(userId: string): Promise<Error | object> {
+  async deleteUser(userId: ValidateUserParamsDto): Promise<object | Error> {
     try {
       const userExists = await this.usersRepository.findOne(userId);
 

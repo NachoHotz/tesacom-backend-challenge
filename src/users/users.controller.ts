@@ -12,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
 import CreateUserDto from './dto/create-user.dto';
 import UpdateUserDto from './dto/update-user.dto';
+import ValidateUserParamsDto from './dto/validate-params.dto';
 import * as bcrypt from 'bcrypt';
 
 @Controller('users')
@@ -26,7 +27,7 @@ export class UsersController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':email')
-  async getUniqueUser(@Param('email') email: string) {
+  async getUniqueUser(@Param() email: ValidateUserParamsDto) {
     return await this.usersService.getUniqueUser(email);
   }
 
@@ -36,9 +37,9 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Put(':userEmail')
+  @Put(':email')
   async updateUser(
-    @Param('userEmail') userEmail: string,
+    @Param() email: ValidateUserParamsDto,
     @Body() updatedUserBody: UpdateUserDto,
   ) {
     if (updatedUserBody.password) {
@@ -47,12 +48,12 @@ export class UsersController {
         12,
       );
     }
-    return await this.usersService.updateUser(userEmail, updatedUserBody);
+    return await this.usersService.updateUser(email, updatedUserBody);
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':userEmail')
-  async deleteUser(@Param('userEmail') userEmail: string) {
-    return await this.usersService.deleteUser(userEmail);
+  @Delete(':email')
+  async deleteUser(@Param() email: ValidateUserParamsDto) {
+    return await this.usersService.deleteUser(email);
   }
 }

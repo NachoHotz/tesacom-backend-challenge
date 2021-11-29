@@ -26,9 +26,9 @@ export class AppsService {
     }
   }
 
-  async getUniqueApp(appsId: number): Promise<Error | object> {
+  async getUniqueApp(appId: number): Promise<Error | object> {
     try {
-      const uniqueApp = await this.appsRepository.findOne(appsId);
+      const uniqueApp = await this.appsRepository.findOne(appId);
 
       if (!uniqueApp) {
         return new NotFoundException('no app found with that id');

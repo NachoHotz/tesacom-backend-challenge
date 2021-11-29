@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -24,9 +25,9 @@ export class AppsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get(':appsId')
-  async getUniqueApp(@Param('appsId') appsId: string) {
-    return await this.appsService.getUniqueApp(parseInt(appsId));
+  @Get(':appId')
+  async getUniqueApp(@Param('appId', ParseIntPipe) appId: number) {
+    return await this.appsService.getUniqueApp(appId);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -39,14 +40,14 @@ export class AppsController {
   @Put(':appId')
   async updateApp(
     @Body() updatedApp: UpdateAppDto,
-    @Param('appId') appId: string,
+    @Param('appId', ParseIntPipe) appId: number,
   ) {
-    return await this.appsService.updateApp(updatedApp, parseInt(appId));
+    return await this.appsService.updateApp(updatedApp, appId);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':appId')
-  async deleteApp(@Param('appId') appId: string) {
-    return await this.appsService.deleteApp(parseInt(appId));
+  async deleteApp(@Param('appId', ParseIntPipe) appId: number) {
+    return await this.appsService.deleteApp(appId);
   }
 }
