@@ -20,15 +20,13 @@ export class UsersService {
   ) {}
 
 /**
- Returns all of the users from the database.
+ Returns all of instances of a user from the database.
 
- If there are no users found, it returns an error of type NotFoundException.
+ If there is an error with the request, it will return an error of type Error with more information.
 
- @return object - an object with the following properties:
- - success: boolean - true
- - code: number - 200
- - message: string - Users found
- - data: array of Users
+ If there are no users found, it returns an error of type NotFoundException with more information.
+
+ @return object - an object return by the successHandler function when the request is successfull. Check this function to learn more.
 */
   async getUsers(): Promise<object | Error> {
     try {
@@ -47,15 +45,13 @@ export class UsersService {
 /**
  * Returns an unique user from the database.
  *
- * If there is no user found, it returns an error of type NotFoundException.
+ * If there is a error with the request, it will return an error of type Error with more information.
  *
- *@param id string - the user id to search. The id is the email of the user.
+ * If there is no user found, it returns an error of type NotFoundException with more information.
+ *
+ *@param userId: ValidateUserParamsDto - string - the user id to search. The id is the email of the user.
 
-  @returns object - an object with the following properties:
-  - success: boolean - true
-  - code: number - 200
-  - message: string - User found
-  - data: object - unique User object
+  @returns object - an object returned by the successHandler function when the request is successfull. Check this function to learn more.
 */
   async getUniqueUser(userId: ValidateUserParamsDto): Promise<object | Error> {
     try {
@@ -85,7 +81,10 @@ export class UsersService {
   /**
    * Creates a new instance of a user in the database.
    *
-   * @param CreateUserDto - newUserBody - an object containing of all the user infomrmation for its creation.
+   * If there is an error with the request, it will return an error of type Error with more information.
+   *
+   * @param newUserBody: CreateUserDto - an object containing of all the user infomrmation for its creation.
+   *
    * It has the following properties:
    * - name: string - first name of the user
    * - lastname: string
@@ -99,12 +98,8 @@ export class UsersService {
    *
    * If there is a property that is not present in the CreateUserDto, it will be ignored by this method, and not inserted into the new User instance.
    *
-   * @returns Error - if there is a user in the database with the same email as the one to be created, it will return an error of type BadRequestException
-   * @returns object - if the request is successful, it will return an object with the following properties:
-   * - success: boolean - true
-   * - code: number - 201
-   * - message: string - user created successfully
-   * - data: object - the new created user
+   * @returns Error - if there is a user in the database with the same email as the one to be created, it will return an error of type BadRequestException with more information.
+   * @returns object - an object returned by the successHandler function when the request is successfull. Check this function to learn more
   */
   async createUser(newUserBody: CreateUserDto): Promise<object | Error> {
     try {
@@ -123,6 +118,19 @@ export class UsersService {
     }
   }
 
+  /**
+   * Updates an instance of a User in the database
+   *
+   * If there is an error with the request, it return an error of type Error with more information.
+   *
+   * @param userId: ValidateUserParamsDto - the id of the user to update. The id is the email of the user
+   *
+   * If a user is not found with that id, it will return an error of type BadRequestException with more information.
+   *
+   * @param updatedUserBody: UpdateUserDto - the object with the properties to update with the new information
+   *
+   * @returns object - an object which is returned by the successHandler function if the request is successfull. Check this function to learn more.
+  */
   async updateUser(
     userId: ValidateUserParamsDto,
     updatedUserBody: UpdateUserDto,
@@ -144,12 +152,23 @@ export class UsersService {
     }
   }
 
+  /**
+   * Delete an instance of a User from the database
+   *
+   * If there is an error with the request, it will return an error of type Error with more information.
+   *
+   * @param userId: ValidateUserParamsDto - string - the id of the user to delete. It is the email of the user
+   *
+   * If a user is not found with that email, it returns an error of type BadRequestException with more information.
+   *
+   * @returns object - an object which is returned by the successHandler function when the request is successfull. Check this function to learn more.
+  */
   async deleteUser(userId: ValidateUserParamsDto): Promise<object | Error> {
     try {
       const userExists = await this.usersRepository.findOne(userId);
 
       if (!userExists) {
-        return new BadRequestException( 'User doesn´t exists or has already been deleted');
+        return new BadRequestException('User doesn´t exists or has already been deleted');
       }
 
       await this.usersRepository.delete(userId);
