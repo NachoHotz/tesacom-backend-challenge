@@ -20,7 +20,7 @@ export class UsersService {
   ) {}
 
 /**
- Returns all of instances of a user from the database.
+ Returns all instances of a user from the database.
 
  If there is an error with the request, it will return an error of type Error with more information.
 
@@ -112,7 +112,7 @@ export class UsersService {
       const newUser = await this.usersRepository.create(newUserBody);
       const savedUser = await this.usersRepository.save(newUser);
 
-      return successHandler(true, 200, 'User created successfully', savedUser);
+      return successHandler(true, 201, 'User created successfully', savedUser);
     } catch (e) {
       return new Error(e);
     }
