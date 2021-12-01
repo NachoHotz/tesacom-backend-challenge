@@ -12,16 +12,15 @@
  *
  * @returns object - an object containing the after mentioned properties.
 */
-export const successHandler = (
-  success: boolean,
-  code: number,
-  message: string,
-  data?: object | [],
-): object => {
-  return {
-    success: success,
-    statusCode: code,
-    message: message,
-    data: data,
-  };
-};
+
+export default class SuccessHandler {
+  constructor(success: boolean, code: number, message: string, data?: object | []) {
+    return {
+      success: success,
+      code: code,
+      message: message,
+      data: data,
+    }
+  }
+}
+

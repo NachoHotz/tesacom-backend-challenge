@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { successHandler } from 'src/helpers/successHandler';
+import SuccessHandler from '../helpers/successHandler';
 import Devices from './devices.entity';
 import CreateDeviceDto from './dto/create-devices.dto';
 import UpdateDeviceDto from './dto/update-devices.dto';
@@ -24,7 +24,7 @@ export class DevicesService {
    *
    * If no devices are found, it will return an error of type NotFoundException with more information.
    *
-   * @returns object - an object returned by the successHandler function. Check this function to learn more.
+   * @returns object - an object returned by the SuccessHandler class. Check this class to learn more.
   */
   async getDevices(): Promise<Error | object> {
     try {
@@ -34,7 +34,7 @@ export class DevicesService {
         return new NotFoundException('No devices found');
       }
 
-      return successHandler(true, 200, 'Devices found', devices);
+      return new SuccessHandler(true, 200, 'Devices found', devices);
     } catch (e) {
       return new Error(e);
     }
@@ -49,7 +49,7 @@ export class DevicesService {
     *
     *@param deviceId - string - the device id to search. The id is the serial number of the device.
 
-    @returns object - an object returned by the successHandler function when the request is successfull. Check this function to learn more.
+    @returns object - an object returned by the SuccessHandler class when the request is successfull. Check this class to learn more.
   */
   async getUniqueDevice(deviceId: string): Promise<Error | object> {
     try {
@@ -59,7 +59,7 @@ export class DevicesService {
         return new NotFoundException(`No device found with serial number ${deviceId}`);
       }
 
-      return successHandler(true, 200, 'Device found', uniqueDevice);
+      return new SuccessHandler(true, 200, 'Device found', uniqueDevice);
     } catch (e) {
       return new Error(e);
     }
@@ -86,7 +86,8 @@ export class DevicesService {
    * If there is a property that is not present in the CreateDeviceDto, it will be ignored by this method, and not inserted into the new Device instance.
    *
    * @returns Error - if there is a device in the database with the same serial number as the one to be created, it will return an error of type BadRequestException with more information.
-   * @returns object - an object returned by the successHandler function when the request is successfull. Check this function to learn more
+   *
+   * @returns object - an object returned by the SuccessHandler class when the request is successfull. Check this class to learn more
   */
   async createDevice(newDeviceBody: CreateDeviceDto): Promise<Error | object> {
     try {
@@ -100,7 +101,7 @@ export class DevicesService {
 
       await this.devicesRepository.save(newDevice);
 
-      return successHandler( true, 200, 'Device created successfully', newDevice);
+      return new SuccessHandler( true, 201, 'Device created successfully', newDevice);
     } catch (e) {
       return new Error(e);
     }
@@ -117,7 +118,7 @@ export class DevicesService {
    *
    * @param updateDeviceBody: UpdateDeviceDto - the object with the properties to update with the new information.
    *
-   * @returns object - an object which is returned by the successHandler function if the request is successfull. Check this function to learn more.
+   * @returns object - an object which is returned by the SuccessHandler class if the request is successfull. Check this class to learn more.
   */
   async updateDevice(
     updateDeviceBody: UpdateDeviceDto,
@@ -132,7 +133,7 @@ export class DevicesService {
 
       await this.devicesRepository.update(deviceId, updateDeviceBody);
 
-      return successHandler(true, 200, 'Device updated successfully', deviceExists);
+      return new SuccessHandler(true, 200, 'Device updated successfully', deviceExists);
     } catch (e) {
       return new Error(e);
     }
@@ -147,7 +148,7 @@ export class DevicesService {
    *
    * If a devcie is not found with that serial number, it returns an error of type BadRequestException with more information.
    *
-   * @returns object - an object which is returned by the successHandler function when the request is successfull. Check this function to learn more.
+   * @returns object - an object which is returned by the SuccessHandler class when the request is successfull. Check this class to learn more.
   */
   async deleteDevice(deviceId: string): Promise<Error | object> {
     try {
@@ -159,7 +160,7 @@ export class DevicesService {
 
       await this.devicesRepository.delete(deviceId);
 
-      return successHandler(true, 200, 'Device deleted successfully', deviceExists);
+      return new SuccessHandler(true, 200, 'Device deleted successfully', deviceExists);
     } catch (e) {
       return new Error(e);
     }

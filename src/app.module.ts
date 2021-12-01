@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { DevicesController } from './devices/devices.controller';
-import { AppsController } from './apps/apps.controller';
 import { AppsModule } from './apps/apps.module';
 import { DevicesModule } from './devices/devices.module';
 import { LoginModule } from './login/login.module';
@@ -23,7 +22,7 @@ import DatabaseConfig from './database.config';
     DevicesModule,
     LoginModule,
   ],
-  controllers: [UsersController, DevicesController, AppsController],
+  controllers: [UsersController, DevicesController],
   providers: [],
 })
 export class AppModule {}

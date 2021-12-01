@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { successHandler } from 'src/helpers/successHandler';
+import SuccessHandler from 'src/helpers/successHandler';
 import CreateUserDto from './dto/create-user.dto';
 import UpdateUserDto from './dto/update-user.dto';
 import ValidateUserDto from 'src/login/dto/validate-user.dto';
@@ -26,7 +26,7 @@ export class UsersService {
 
  If there are no users found, it returns an error of type NotFoundException with more information.
 
- @return object - an object return by the successHandler function when the request is successfull. Check this function to learn more.
+ @return object - an object return by the SuccessHandler class when the request is successfull. Check this class to learn more.
 */
   async getUsers(): Promise<object | Error> {
     try {
@@ -36,7 +36,7 @@ export class UsersService {
         return new NotFoundException('No users found');
       }
 
-      return successHandler(true, 200, 'Users found', users);
+      return new SuccessHandler(true, 200, 'Users found', users);
     } catch (e) {
       return new Error(e);
     }
@@ -51,7 +51,7 @@ export class UsersService {
  *
  *@param userId: ValidateUserParamsDto - string - the user id to search. The id is the email of the user.
 
-  @returns object - an object returned by the successHandler function when the request is successfull. Check this function to learn more.
+  @returns object - an object returned by the SuccessHandler class when the request is successfull. Check this class to learn more.
 */
   async getUniqueUser(userId: ValidateUserParamsDto): Promise<object | Error> {
     try {
@@ -61,7 +61,7 @@ export class UsersService {
         return new NotFoundException(`No user found with email ${userId.email}`);
       }
 
-      return successHandler(true, 201, 'User found', uniqueUser);
+      return new SuccessHandler(true, 200, 'User found', uniqueUser);
     } catch (e) {
       return new Error(e);
     }
@@ -99,7 +99,7 @@ export class UsersService {
    * If there is a property that is not present in the CreateUserDto, it will be ignored by this method, and not inserted into the new User instance.
    *
    * @returns Error - if there is a user in the database with the same email as the one to be created, it will return an error of type BadRequestException with more information.
-   * @returns object - an object returned by the successHandler function when the request is successfull. Check this function to learn more
+   * @returns object - an object returned by the SuccessHandler class when the request is successfull. Check this class to learn more
   */
   async createUser(newUserBody: CreateUserDto): Promise<object | Error> {
     try {
@@ -112,7 +112,7 @@ export class UsersService {
       const newUser = await this.usersRepository.create(newUserBody);
       const savedUser = await this.usersRepository.save(newUser);
 
-      return successHandler(true, 201, 'User created successfully', savedUser);
+      return new SuccessHandler(true, 201, 'User created successfully', savedUser);
     } catch (e) {
       return new Error(e);
     }
@@ -129,7 +129,7 @@ export class UsersService {
    *
    * @param updatedUserBody: UpdateUserDto - the object with the properties to update with the new information
    *
-   * @returns object - an object which is returned by the successHandler function if the request is successfull. Check this function to learn more.
+   * @returns object - an object which is returned by the SuccessHandler class if the request is successfull. Check this class to learn more.
   */
   async updateUser(
     userId: ValidateUserParamsDto,
@@ -146,7 +146,7 @@ export class UsersService {
 
       const updatedUser = await this.usersRepository.findOne(userId);
 
-      return successHandler(true, 200, 'User updated successfully', updatedUser);
+      return new SuccessHandler(true, 200, 'User updated successfully', updatedUser);
     } catch (e) {
       return new Error(e);
     }
@@ -161,7 +161,7 @@ export class UsersService {
    *
    * If a user is not found with that email, it returns an error of type BadRequestException with more information.
    *
-   * @returns object - an object which is returned by the successHandler function when the request is successfull. Check this function to learn more.
+   * @returns object - an object which is returned by the SuccessHandler class when the request is successfull. Check this class to learn more.
   */
   async deleteUser(userId: ValidateUserParamsDto): Promise<object | Error> {
     try {
@@ -173,7 +173,7 @@ export class UsersService {
 
       await this.usersRepository.delete(userId);
 
-      return successHandler(true, 200, 'User deleted successfully', userExists);
+      return new SuccessHandler(true, 200, 'User deleted successfully', userExists);
     } catch (e) {
       return new Error(e);
     }
