@@ -107,6 +107,19 @@ export class AppsService {
     }
   }
 
+  /**
+   * Updates an instance of an App in the database
+   *
+   * If there is an error with the request, it return an error of type Error with more information.
+   *
+   * @param appId - number - the id of the device to update.
+   *
+   * If an app is not found with that id, it will return an error of type BadRequestException with more information.
+   *
+   * @param updatedApp: UpdateAppDto - the object with the properties to update with the new information.
+   *
+   * @returns object - an object which is returned by the SuccessHandler class if the request is successfull. Check this class to learn more.
+  */
   async updateApp(
     updatedApp: UpdateAppDto,
     appId: number,
@@ -131,6 +144,17 @@ export class AppsService {
     }
   }
 
+  /**
+   * Delete an instance of an App from the database
+   *
+   * If there is an error with the request, it will return an error of type Error with more information.
+   *
+   * @param appId - number - the id of the device to delete.
+   *
+   * If an app is not found with that id, it returns an error of type BadRequestException with more information.
+   *
+   * @returns object - an object which is returned by the SuccessHandler class when the request is successfull. Check this class to learn more.
+  */
   async deleteApp(appId: number): Promise<Error | object> {
     try {
       const appExists = await this.appsRepository.findOne(appId);
