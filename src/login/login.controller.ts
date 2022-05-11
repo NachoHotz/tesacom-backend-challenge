@@ -1,6 +1,6 @@
-import { Controller, Post, Body } from "@nestjs/common";
-import { LoginService } from "./login.service";
-import ValidateUserDto from "./dto/validate-user.dto";
+import { Controller, Post, Body } from '@nestjs/common';
+import { LoginService } from './login.service';
+import ValidateUserDto from './dto/validate-user.dto';
 
 @Controller('login')
 export default class LoginController {

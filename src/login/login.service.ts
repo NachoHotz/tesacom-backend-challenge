@@ -24,10 +24,10 @@ export class LoginService {
    * Else, if the given password, is not the same as the one stored in the database, it will return an error of type UnauthorizedException.
    *
    * @returns string - The Json Web Token related to that validated user by calling the signUser service.
-  */
+   */
   async validateUser(
     userCredentials: ValidateUserDto,
-  ): Promise<Error | User | {}> {
+  ): Promise<Error | User | unknown> {
     const user = await this.usersService.getValidatedUser(userCredentials);
 
     if (!user) {

@@ -25,7 +25,7 @@ export class DevicesService {
    * If no devices are found, it will return an error of type NotFoundException with more information.
    *
    * @returns object - an object returned by the SuccessHandler class. Check this class to learn more.
-  */
+   */
   async getDevices(): Promise<Error | object> {
     try {
       const devices = await this.devicesRepository.find();
@@ -56,7 +56,9 @@ export class DevicesService {
       const uniqueDevice = await this.devicesRepository.findOne(deviceId);
 
       if (!uniqueDevice) {
-        return new NotFoundException(`No device found with serial number ${deviceId}`);
+        return new NotFoundException(
+          `No device found with serial number ${deviceId}`,
+        );
       }
 
       return new SuccessHandler(true, 200, 'Device found', uniqueDevice);
@@ -88,20 +90,29 @@ export class DevicesService {
    * @returns Error - if there is a device in the database with the same serial number as the one to be created, it will return an error of type BadRequestException with more information.
    *
    * @returns object - an object returned by the SuccessHandler class when the request is successfull. Check this class to learn more
-  */
+   */
   async createDevice(newDeviceBody: CreateDeviceDto): Promise<Error | object> {
     try {
-      const deviceExists = await this.devicesRepository.findOne( newDeviceBody.serial);
+      const deviceExists = await this.devicesRepository.findOne(
+        newDeviceBody.serial,
+      );
 
       if (deviceExists) {
-        return new BadRequestException(`Device already registered with serial number ${newDeviceBody.serial}`);
+        return new BadRequestException(
+          `Device already registered with serial number ${newDeviceBody.serial}`,
+        );
       }
 
-      const newDevice = await this.devicesRepository.create(newDeviceBody);
+      const newDevice = this.devicesRepository.create(newDeviceBody);
 
       await this.devicesRepository.save(newDevice);
 
-      return new SuccessHandler( true, 201, 'Device created successfully', newDevice);
+      return new SuccessHandler(
+        true,
+        201,
+        'Device created successfully',
+        newDevice,
+      );
     } catch (e) {
       return new Error(e);
     }
@@ -119,7 +130,7 @@ export class DevicesService {
    * @param updateDeviceBody: UpdateDeviceDto - the object with the properties to update with the new information.
    *
    * @returns object - an object which is returned by the SuccessHandler class if the request is successfull. Check this class to learn more.
-  */
+   */
   async updateDevice(
     updateDeviceBody: UpdateDeviceDto,
     deviceId: string,
@@ -128,12 +139,19 @@ export class DevicesService {
       const deviceExists = await this.devicesRepository.findOne(deviceId);
 
       if (!deviceExists) {
-        return new BadRequestException(`No device found with serial number ${deviceId} to edit`);
+        return new BadRequestException(
+          `No device found with serial number ${deviceId} to edit`,
+        );
       }
 
       await this.devicesRepository.update(deviceId, updateDeviceBody);
 
-      return new SuccessHandler(true, 200, 'Device updated successfully', deviceExists);
+      return new SuccessHandler(
+        true,
+        200,
+        'Device updated successfully',
+        deviceExists,
+      );
     } catch (e) {
       return new Error(e);
     }
@@ -149,18 +167,25 @@ export class DevicesService {
    * If a devcie is not found with that serial number, it returns an error of type BadRequestException with more information.
    *
    * @returns object - an object which is returned by the SuccessHandler class when the request is successfull. Check this class to learn more.
-  */
+   */
   async deleteDevice(deviceId: string): Promise<Error | object> {
     try {
       const deviceExists = await this.devicesRepository.findOne(deviceId);
 
       if (!deviceExists) {
-        return new BadRequestException('Device doesn´t exists or has already been deleted');
+        return new BadRequestException(
+          'Device doesn´t exists or has already been deleted',
+        );
       }
 
       await this.devicesRepository.delete(deviceId);
 
-      return new SuccessHandler(true, 200, 'Device deleted successfully', deviceExists);
+      return new SuccessHandler(
+        true,
+        200,
+        'Device deleted successfully',
+        deviceExists,
+      );
     } catch (e) {
       return new Error(e);
     }

@@ -11,16 +11,20 @@
  * @param data object or array - an optional property which can be a single object or an array of objects.
  *
  * @returns object - an object containing the after mentioned properties.
-*/
+ */
 
 export default class SuccessHandler {
-  constructor(success: boolean, code: number, message: string, data?: object | []) {
+  constructor(
+    success: boolean,
+    code: number,
+    message: string,
+    data?: object | [],
+  ) {
     return {
       success: success,
       code: code,
       message: message,
       data: data,
-    }
+    };
   }
 }
-

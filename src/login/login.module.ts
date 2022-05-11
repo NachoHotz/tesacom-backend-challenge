@@ -7,15 +7,18 @@ import LoginController from './login.controller';
 import JwtStrategy from './strategy/jwt.strategy';
 
 @Module({
-  imports: [UsersModule, JwtModule.registerAsync({
-    imports: [ConfigModule],
-    useFactory: async (configService: ConfigService) => ({
-      secret: configService.get<string>('jwtSecret')
+  imports: [
+    UsersModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('jwtSecret'),
+      }),
+      inject: [ConfigService],
     }),
-    inject: [ConfigService],
-  })],
+  ],
   controllers: [LoginController],
   providers: [LoginService, JwtStrategy],
-  exports: [LoginService]
+  exports: [LoginService],
 })
 export class LoginModule {}

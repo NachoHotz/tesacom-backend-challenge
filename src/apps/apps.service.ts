@@ -98,7 +98,7 @@ export class AppsService {
         );
       }
 
-      const newApp = await this.appsRepository.create(newAppBody);
+      const newApp = this.appsRepository.create(newAppBody);
       await this.appsRepository.save(newApp);
 
       return new SuccessHandler(true, 201, 'App created successfully', newApp);
@@ -119,7 +119,7 @@ export class AppsService {
    * @param updatedApp: UpdateAppDto - the object with the properties to update with the new information.
    *
    * @returns object - an object which is returned by the SuccessHandler class if the request is successfull. Check this class to learn more.
-  */
+   */
   async updateApp(
     updatedApp: UpdateAppDto,
     appId: number,
@@ -154,7 +154,7 @@ export class AppsService {
    * If an app is not found with that id, it returns an error of type BadRequestException with more information.
    *
    * @returns object - an object which is returned by the SuccessHandler class when the request is successfull. Check this class to learn more.
-  */
+   */
   async deleteApp(appId: number): Promise<Error | object> {
     try {
       const appExists = await this.appsRepository.findOne(appId);

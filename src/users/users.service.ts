@@ -19,7 +19,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-/**
+  /**
  Returns all instances of a user from the database.
 
  If there is an error with the request, it will return an error of type Error with more information.
@@ -42,7 +42,7 @@ export class UsersService {
     }
   }
 
-/**
+  /**
  * Returns an unique user from the database.
  *
  * If there is a error with the request, it will return an error of type Error with more information.
@@ -58,7 +58,9 @@ export class UsersService {
       const uniqueUser = await this.usersRepository.findOne(userId);
 
       if (!uniqueUser) {
-        return new NotFoundException(`No user found with email ${userId.email}`);
+        return new NotFoundException(
+          `No user found with email ${userId.email}`,
+        );
       }
 
       return new SuccessHandler(true, 200, 'User found', uniqueUser);
@@ -69,10 +71,7 @@ export class UsersService {
 
   async getValidatedUser(userCredentials: ValidateUserDto): Promise<User> {
     try {
-      const userValidated = await this.usersRepository.findOne(
-        userCredentials.email,
-      );
-      return userValidated;
+      return await this.usersRepository.findOne(userCredentials.email);
     } catch (e) {
       console.log(e);
     }
@@ -100,19 +99,26 @@ export class UsersService {
    *
    * @returns Error - if there is a user in the database with the same email as the one to be created, it will return an error of type BadRequestException with more information.
    * @returns object - an object returned by the SuccessHandler class when the request is successfull. Check this class to learn more
-  */
+   */
   async createUser(newUserBody: CreateUserDto): Promise<object | Error> {
     try {
       const userExists = await this.usersRepository.findOne(newUserBody.email);
 
       if (userExists) {
-        return new BadRequestException(`User already registered with email ${newUserBody.email}`);
+        return new BadRequestException(
+          `User already registered with email ${newUserBody.email}`,
+        );
       }
 
-      const newUser = await this.usersRepository.create(newUserBody);
+      const newUser = this.usersRepository.create(newUserBody);
       const savedUser = await this.usersRepository.save(newUser);
 
-      return new SuccessHandler(true, 201, 'User created successfully', savedUser);
+      return new SuccessHandler(
+        true,
+        201,
+        'User created successfully',
+        savedUser,
+      );
     } catch (e) {
       return new Error(e);
     }
@@ -130,7 +136,7 @@ export class UsersService {
    * @param updatedUserBody: UpdateUserDto - the object with the properties to update with the new information
    *
    * @returns object - an object which is returned by the SuccessHandler class if the request is successfull. Check this class to learn more.
-  */
+   */
   async updateUser(
     userId: ValidateUserParamsDto,
     updatedUserBody: UpdateUserDto,
@@ -139,14 +145,21 @@ export class UsersService {
       const userExists = await this.usersRepository.findOne(userId);
 
       if (!userExists) {
-        return new BadRequestException(`No user registered with email ${userId.email}`);
+        return new BadRequestException(
+          `No user registered with email ${userId.email}`,
+        );
       }
 
       await this.usersRepository.update(userId, updatedUserBody);
 
       const updatedUser = await this.usersRepository.findOne(userId);
 
-      return new SuccessHandler(true, 200, 'User updated successfully', updatedUser);
+      return new SuccessHandler(
+        true,
+        200,
+        'User updated successfully',
+        updatedUser,
+      );
     } catch (e) {
       return new Error(e);
     }
@@ -162,18 +175,25 @@ export class UsersService {
    * If a user is not found with that email, it returns an error of type BadRequestException with more information.
    *
    * @returns object - an object which is returned by the SuccessHandler class when the request is successfull. Check this class to learn more.
-  */
+   */
   async deleteUser(userId: ValidateUserParamsDto): Promise<object | Error> {
     try {
       const userExists = await this.usersRepository.findOne(userId);
 
       if (!userExists) {
-        return new BadRequestException('User doesn´t exists or has already been deleted');
+        return new BadRequestException(
+          'User doesn´t exists or has already been deleted',
+        );
       }
 
       await this.usersRepository.delete(userId);
 
-      return new SuccessHandler(true, 200, 'User deleted successfully', userExists);
+      return new SuccessHandler(
+        true,
+        200,
+        'User deleted successfully',
+        userExists,
+      );
     } catch (e) {
       return new Error(e);
     }
