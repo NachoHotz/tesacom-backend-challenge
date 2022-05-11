@@ -7,8 +7,8 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
-import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AppsService } from './apps.service';
 import CreateAppsDto from './dto/create-apps.dto';
