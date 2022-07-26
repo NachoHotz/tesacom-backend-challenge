@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import User from 'src/users/user.entity';
-import ValidateUserDto from './dto/validate-user.dto';
+import ValidateUserDto from './dto/ValidateUserParamsDto.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

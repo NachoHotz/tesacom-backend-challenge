@@ -7,8 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import SuccessHandler from '../helpers/successHandler';
 import Devices from './devices.entity';
-import CreateDeviceDto from './dto/create-devices.dto';
-import UpdateDeviceDto from './dto/update-devices.dto';
+import CreateDeviceDto from './dto/CreateDeviceDto.dto';
+import UpdateDeviceDto from './dto/UpdateDeviceDto.dto';
 
 @Injectable()
 export class DevicesService {

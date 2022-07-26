@@ -22,18 +22,18 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   @Get()
   async getUsers() {
-    return await this.usersService.getUsers();
+    return this.usersService.getUsers();
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':email')
   async getUniqueUser(@Param() email: ValidateUserParamsDto) {
-    return await this.usersService.getUniqueUser(email);
+    return this.usersService.getUniqueUser(email);
   }
 
   @Post()
   async createUser(@Body() newUser: CreateUserDto) {
-    return await this.usersService.createUser(newUser);
+    return this.usersService.createUser(newUser);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -48,12 +48,12 @@ export class UsersController {
         12,
       );
     }
-    return await this.usersService.updateUser(email, updatedUserBody);
+    return this.usersService.updateUser(email, updatedUserBody);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':email')
   async deleteUser(@Param() email: ValidateUserParamsDto) {
-    return await this.usersService.deleteUser(email);
+    return this.usersService.deleteUser(email);
   }
 }

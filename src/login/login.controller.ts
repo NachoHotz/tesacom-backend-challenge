@@ -1,6 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { LoginService } from './login.service';
-import ValidateUserDto from './dto/validate-user.dto';
+import ValidateUserDto from './dto/ValidateUserParamsDto.dto';
 
 @Controller('login')
 export default class LoginController {
@@ -8,6 +8,6 @@ export default class LoginController {
 
   @Post()
   async validate(@Body() userCredentials: ValidateUserDto) {
-    return await this.loginService.validateUser(userCredentials);
+    return this.loginService.validateUser(userCredentials);
   }
 }

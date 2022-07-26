@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { DevicesService } from './devices.service';
-import CreateDeviceDto from './dto/create-devices.dto';
-import UpdateDeviceDto from './dto/update-devices.dto';
+import CreateDeviceDto from './dto/CreateDeviceDto.dto';
+import UpdateDeviceDto from './dto/UpdateDeviceDto.dto';
 
 @Controller('devices')
 export class DevicesController {
@@ -20,13 +20,13 @@ export class DevicesController {
   @UseGuards(AuthGuard('jwt'))
   @Get()
   async getDevices() {
-    return await this.devicesService.getDevices();
+    return this.devicesService.getDevices();
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':deviceId')
   async getUniqueDevice(@Param('deviceId') deviceId: string) {
-    return await this.devicesService.getUniqueDevice(deviceId);
+    return this.devicesService.getUniqueDevice(deviceId);
   }
 
   @UseGuards(AuthGuard('jwt'))

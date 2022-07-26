@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import SuccessHandler from '../helpers/successHandler';
 import CreateAppsDto from './dto/create-apps.dto';
-import UpdateAppDto from './dto/update-apps.dto';
+import UpdateAppDto from './dto/UpdateAppDto.dto';
 import Apps from './apps.entity';
 
 @Injectable()
